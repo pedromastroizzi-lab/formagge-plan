@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan HubSpot — Formagge</title>
+<style>
+  :root {
+    --bg: #f9f9f7;
+    --surface: #ffffff;
+    --surface2: #f3f3f0;
+    --border: rgba(0,0,0,0.1);
+    --border2: rgba(0,0,0,0.06);
+    --text: #1a1a1a;
+    --text2: #666;
+    --text3: #999;
+    --purple: #534AB7;
+    --purple-bg: #EEEDFE;
+    --purple-text: #3C3489;
+    --teal: #0F6E56;
+    --teal-bg: #E1F5EE;
+    --teal-text: #085041;
+    --amber: #854F0B;
+    --amber-bg: #FAEEDA;
+    --amber-text: #633806;
+    --green: #1D9E75;
+    --orange: #EF9F27;
+    --red: #E24B4A;
+    --red-bg: #FCEBEB;
+    --red-text: #A32D2D;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
+
+  /* HEADER */
+  .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; }
+  .header h1 { font-size: 16px; font-weight: 600; color: var(--text); }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .sync-badge { font-size: 11px; color: var(--text3); background: var(--surface2); padding: 3px 10px; border-radius: 20px; border: 1px solid var(--border); }
+
+  /* NAV */
+  .nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; gap: 4px; overflow-x: auto; }
+  .nav-btn { padding: 12px 16px; font-size: 13px; font-weight: 500; color: var(--text2); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+  .nav-btn:hover { color: var(--text); }
+  .nav-btn.active { color: var(--purple); border-bottom-color: var(--purple); }
+
+  /* LAYOUT */
+  .main { max-width: 1100px; margin: 0 auto; padding: 24px 24px 80px; }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* CARDS */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; }
+  .card-title { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 14px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  /* CONTEXT ITEMS */
+  .ctx-item { font-size: 13px; color: var(--text2); padding: 6px 0; border-bottom: 1px solid var(--border2); line-height: 1.5; }
+  .ctx-item:last-child { border-bottom: none; }
+  .ctx-item b { color: var(--text); font-weight: 600; }
+
+  /* PHASE HEADER */
+  .phase-hdr { display: flex; align-items: center; gap: 12px; padding: 16px 20px; background: var(--surface2); border-radius: 10px; margin-bottom: 20px; }
+  .phase-badge { font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+  .b1 { background: var(--purple-bg); color: var(--purple-text); }
+  .b2 { background: var(--teal-bg); color: var(--teal-text); }
+  .b3 { background: var(--amber-bg); color: var(--amber-text); }
+  .phase-title { font-size: 16px; font-weight: 600; }
+  .phase-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+  /* PROGRESS */
+  .prog-wrap { margin-bottom: 20px; }
+  .prog-label { font-size: 12px; color: var(--text2); margin-bottom: 6px; }
+  .prog-track { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+  .prog-bar { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
+  .pb1 { background: var(--purple); }
+  .pb2 { background: var(--teal); }
+  .pb3 { background: var(--amber); }
+
+  /* STATS ROW */
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+  .stat { background: var(--surface2); border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; }
+  .stat-lbl { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .sv-green { color: var(--green); }
+  .sv-orange { color: var(--orange); }
+  .sv-gray { color: var(--text3); }
+
+  /* SECTION LABEL */
+  .sec-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; margin: 20px 0 8px; }
+  .sl-p { color: var(--purple); }
+  .sl-t { color: var(--teal); }
+  .sl-a { color: var(--amber); }
+  .sl-r { color: #993C1D; }
+
+  /* CHECKLIST */
+  .checklist { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
+  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 16px; cursor: pointer; border-bottom: 1px solid var(--border2); transition: background 0.1s; }
+  .check-item:last-child { border-bottom: none; }
+  .check-item:hover { background: var(--surface2); }
+  .chk { width: 18px; height: 18px; border-radius: 4px; border: 2px solid #ccc; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .chk.done { background: var(--green); border-color: var(--green); }
+  .chk.done::after { content: ''; display: block; width: 5px; height: 9px; border: 2px solid white; border-top: none; border-left: none; transform: rotate(45deg) translateY(-1px); }
+  .chk.wip { background: var(--orange); border-color: var(--orange); }
+  .chk.wip::after { content: ''; display: block; width: 9px; height: 2px; background: white; border-radius: 1px; }
+  .check-body { flex: 1; min-width: 0; }
+  .check-text { font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .check-text.done { text-decoration: line-through; color: var(--text3); }
+  .check-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .check-del { font-size: 11px; color: var(--text3); background: none; border: none; cursor: pointer; padding: 2px 6px; border-radius: 4px; opacity: 0; flex-shrink: 0; }
+  .check-item:hover .check-del { opacity: 1; }
+  .check-del:hover { background: var(--red-bg); color: var(--red-text); }
+
+  /* ADD ROW */
+  .add-row { display: flex; gap: 8px; margin-top: 8px; }
+  .add-input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; background: var(--surface); color: var(--text); outline: none; }
+  .add-input:focus { border-color: var(--purple); }
+  .add-btn { padding: 8px 16px; background: var(--purple-bg); color: var(--purple-text); border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .add-btn:hover { background: var(--purple); color: white; }
+
+  /* NOTES */
+  .note-textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; background: var(--surface); color: var(--text); resize: vertical; min-height: 120px; outline: none; font-family: inherit; line-height: 1.6; }
+  .note-textarea:focus { border-color: var(--purple); }
+  .save-btn { margin-top: 8px; padding: 7px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--text2); cursor: pointer; }
+  .save-btn:hover { background: var(--purple-bg); color: var(--purple-text); border-color: var(--purple); }
+  .save-ok { font-size: 11px; color: var(--green); margin-left: 8px; opacity: 0; transition: opacity 0.3s; }
+
+  /* PIPELINE */
+  .pipeline-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px; }
+  .stage-box { border-radius: 10px; padding: 14px; text-align: center; }
+  .stg-a { background: var(--teal-bg); }
+  .stg-r { background: var(--amber-bg); }
+  .stg-d { background: var(--red-bg); }
+  .stg-rec { background: #FAECE7; }
+  .stg-b { background: var(--surface2); }
+  .stage-n { font-size: 24px; font-weight: 700; }
+  .stg-a .stage-n { color: var(--teal-text); }
+  .stg-r .stage-n { color: var(--amber-text); }
+  .stg-d .stage-n { color: var(--red-text); }
+  .stg-rec .stage-n { color: #712B13; }
+  .stg-b .stage-n { color: #5F5E5A; }
+  .stage-l { font-size: 11px; margin-top: 3px; }
+  .stg-a .stage-l { color: var(--teal); }
+  .stg-r .stage-l { color: var(--amber); }
+  .stg-d .stage-l { color: var(--red-text); }
+  .stg-rec .stage-l { color: #993C1D; }
+  .stg-b .stage-l { color: #888; }
+
+  /* VENDOR */
+  .vend-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px; }
+  .vc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .vn { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .vs { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); padding: 3px 0; border-bottom: 1px solid var(--border2); }
+  .vs:last-child { border-bottom: none; }
+  .vs span:last-child { font-weight: 600; color: var(--text); }
+
+  /* ALERT */
+  .alert-item { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid var(--border2); font-size: 13px; line-height: 1.5; color: var(--text2); }
+  .alert-item:last-child { border-bottom: none; }
+  .adot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+  .adot-r { background: var(--red); }
+  .adot-a { background: var(--orange); }
+  .alert-item b { color: var(--text); font-weight: 600; }
+
+  /* CLAUDE BTN */
+  .claude-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--purple); color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 16px; text-decoration: none; }
+  .claude-btn:hover { background: var(--purple-text); }
+
+  /* CONTEXT COPY */
+  .ctx-copy-area { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; font-size: 12px; color: var(--text2); line-height: 1.7; margin-top: 12px; white-space: pre-wrap; font-family: inherit; }
+  .copy-btn { margin-top: 8px; padding: 7px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--text2); }
+  .copy-btn:hover { background: var(--purple-bg); color: var(--purple-text); }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+    .pipeline-grid, .vend-grid { grid-template-columns: repeat(3, 1fr); }
+    .stats-row { grid-template-columns: 1fr 1fr 1fr; }
+    .main { padding: 16px 16px 80px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Plan HubSpot — Formagge Gastronomía</h1>
+  <div class="header-right">
+    <span class="sync-badge" id="sync-lbl">Cargando...</span>
+  </div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="showTab('ctx',this)">Contexto</button>
+  <button class="nav-btn" onclick="showTab('pipeline',this)">Pipeline hoy</button>
+  <button class="nav-btn" onclick="showTab('f1',this)">Fase 1 — Orden</button>
+  <button class="nav-btn" onclick="showTab('f2',this)">Fase 2 — Inteligencia</button>
+  <button class="nav-btn" onclick="showTab('f3',this)">Fase 3 — Análisis</button>
+  <button class="nav-btn" onclick="showTab('notas',this)">Notas</button>
+</nav>
+
+<div class="main">
+
+<!-- CONTEXTO -->
+<div id="ctx" class="view active">
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">La empresa</div>
+      <div class="ctx-item"><b>Empresa:</b> Formagge — distribuidora gastronómica B2B</div>
+      <div class="ctx-item"><b>Canal foco:</b> Gastronomía</div>
+      <div class="ctx-item"><b>Contexto:</b> Viene de gestión personalista (Eliana). Se profesionaliza por procesos</div>
+      <div class="ctx-item"><b>Objetivo CEO:</b> Canal predecible, rentable y escalable</div>
+      <div class="ctx-item"><b>Mensaje clave:</b> "No quiero volumen sin margen"</div>
+      <div class="ctx-item"><b>Facturación:</b> BPS — fuente de verdad de lo vendido</div>
+      <div class="ctx-item"><b>CRM:</b> HubSpot — gestión comercial y alertas</div>
+      <div class="ctx-item"><b>Análisis:</b> Power BI — cruce BPS + HubSpot</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Tu rol — analista</div>
+      <div class="ctx-item"><b>Función:</b> Convertir datos en decisiones</div>
+      <div class="ctx-item"><b>Reporta a:</b> Jefe de canal gastronomía</div>
+      <div class="ctx-item"><b>Foco 1:</b> Orden financiero-comercial — margen real, rentabilidad por cliente, mix, días de cobro</div>
+      <div class="ctx-item"><b>Foco 2:</b> Automatización de reportes y tableros en Power BI</div>
+      <div class="ctx-item"><b>Foco 3:</b> Alertas, insights y propuestas accionables para el jefe de canal</div>
+      <div class="ctx-item"><b>90 días:</b> Diagnóstico · Segmentación ABC · Mapa rentabilidad · Tablero funcionando</div>
+      <div class="ctx-item"><b>HubSpot:</b> ~1 mes de uso, aprendiendo en el proceso</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Equipo de ventas</div>
+      <div class="ctx-item"><b>Ivo Lattuada</b> — vendedor, pipeline de ventas (49 activos)</div>
+      <div class="ctx-item"><b>Manuela Pesaresi</b> — vendedora, pipeline de ventas (47 activos)</div>
+      <div class="ctx-item"><b>Daniel Masulli</b> — vendedor, pipeline de ventas (50 activos)</div>
+      <div class="ctx-item"><b>Rodrigo Barria</b> — vendedor, pipeline de ventas (33 activos)</div>
+      <div class="ctx-item"><b>Juan Tammaro</b> — dual: cartera propia + único cazador en pipeline de prospectos</div>
+      <div class="ctx-item"><b>Martín Fernández</b> — supermercados, pipeline propio a futuro (no tocar)</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Cómo usan HubSpot</div>
+      <div class="ctx-item"><b>Negocios = clientes</b> — 1 negocio por cliente, no por venta puntual</div>
+      <div class="ctx-item"><b>Amount:</b> no se usa — facturación viene del BPS</div>
+      <div class="ctx-item"><b>Guías prácticas:</b> dentro de cada negocio — visitas, llamadas, notas</div>
+      <div class="ctx-item"><b>Playbook de pedido:</b> actualiza "fecha último pedido" automáticamente</div>
+      <div class="ctx-item"><b>dias_sin_pedido:</b> propiedad calculada (hoy − fecha último pedido)</div>
+      <div class="ctx-item"><b>frecuencia_de_pedidos:</b> desplegable — Semanal / Quincenal / Mensual / >Mensual</div>
+      <div class="ctx-item"><b>Workflow EN RIESGO:</b> activo — mueve automáticamente según frecuencia superada</div>
+      <div class="ctx-item"><b>Panel "Gestión - Clientes EN RIESGO":</b> activo con KPIs por vendedor</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Desafíos del onboarding — lo que la empresa pide</div>
+    <div class="ctx-item">1. Pasar de gestión <b>personalista</b> a gestión por <b>procesos</b> — criterios objetivos, modelo replicable</div>
+    <div class="ctx-item">2. Profesionalizar la <b>rentabilidad</b> — margen por cliente/producto, mix correcto, control de descuentos</div>
+    <div class="ctx-item">3. Ordenar la gestión comercial — pipeline claro, forecast, plan mensual, seguimiento estructurado</div>
+    <div class="ctx-item">4. Gestión de cartera y <b>riesgo</b> — política de crédito, alertas tempranas, coordinación con administración</div>
+    <div class="ctx-item">5. Construir <b>inteligencia comercial</b> — reportes automáticos, tablero, KPIs, segmentación ABC</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Contexto para pegar en Claude al arrancar una sesión</div>
+    <div class="ctx-copy-area" id="ctx-copy">Soy el analista de Formagge, canal gastronomía B2B.
+
+EMPRESA: Formagge — distribuidora gastronómica. Canal viene de gestión personalista (Eliana), ahora se profesionaliza. CEO pide canal predecible, rentable y escalable. Mensaje clave: "No quiero volumen sin margen".
+
+MI ROL: Analista. Reporto al jefe de canal. Mi función es convertir datos en decisiones, automatizar reportes y tableros en Power BI, y generar alertas e insights accionables.
+
+SISTEMAS: HubSpot (CRM, gestión comercial) + BPS (facturación, fuente de verdad) + Power BI (análisis cruzado).
+
+EQUIPO VENTAS: Ivo Lattuada (49 activos), Manuela Pesaresi (47 activos), Daniel Masulli (50 activos), Rodrigo Barria (33 activos), Juan Tammaro (cartera propia + cazador único en pipeline prospectos). Martín Fernández = supermercados, no tocar.
+
+HUBSPOT: Negocios = clientes (1 negocio por cliente). Amount no se usa (facturación en BPS). Playbook de pedido actualiza "fecha_ultimo_pedido". Propiedad calculada "dias_sin_pedido". Workflow EN RIESGO activo con 4 grupos por frecuencia (semanal 7d, quincenal 15d, mensual 30d, >mensual 45d). Panel "Gestión - Clientes EN RIESGO" activo con KPIs por vendedor.
+
+PIPELINE VENTAS HOY: 407 negocios — 183 activos, 145 en riesgo (workflow automático), 5 bajas con deuda, 4 recuperables, 70 definitivas.
+
+FASE ACTUAL: Fase 1 (Orden y base) prácticamente cerrada. Arrancando Fase 2 (Inteligencia comercial activa).</div>
+    <button class="copy-btn" onclick="copyCtx()">Copiar contexto</button>
+    <span id="copy-ok" style="font-size:11px;color:var(--green);margin-left:8px;opacity:0;transition:opacity 0.3s">Copiado</span>
+  </div>
+</div>
+
+<!-- PIPELINE -->
+<div id="pipeline" class="view">
+  <div class="card">
+    <div class="card-title">Estado actual — pipeline de ventas (407 negocios)</div>
+    <div class="pipeline-grid">
+      <div class="stage-box stg-a"><div class="stage-n">183</div><div class="stage-l">Clientes activos</div></div>
+      <div class="stage-box stg-r"><div class="stage-n">145</div><div class="stage-l">En riesgo</div></div>
+      <div class="stage-box stg-d"><div class="stage-n">5</div><div class="stage-l">Bajas con deuda</div></div>
+      <div class="stage-box stg-rec"><div class="stage-n">4</div><div class="stage-l">Bajas recuperables</div></div>
+      <div class="stage-box stg-b"><div class="stage-n">70</div><div class="stage-l">Bajas definitivas</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Activos por vendedor (datos reales de HubSpot)</div>
+    <div class="vend-grid">
+      <div class="vc"><div class="vn">Daniel M.</div><div class="vs"><span>Activos</span><span>50</span></div><div class="vs"><span>En riesgo</span><span>33</span></div></div>
+      <div class="vc"><div class="vn">Ivo L.</div><div class="vs"><span>Activos</span><span>49</span></div><div class="vs"><span>En riesgo</span><span>55</span></div></div>
+      <div class="vc"><div class="vn">Manuela P.</div><div class="vs"><span>Activos</span><span>47</span></div><div class="vs"><span>En riesgo</span><span>24</span></div></div>
+      <div class="vc"><div class="vn">Rodrigo B.</div><div class="vs"><span>Activos</span><span>33</span></div><div class="vs"><span>En riesgo</span><span>24</span></div></div>
+      <div class="vc"><div class="vn">Juan T.</div><div class="vs"><span>Activos</span><span>0</span></div><div class="vs"><span>En riesgo</span><span>12</span></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Sistema EN RIESGO — cómo funciona</div>
+    <div class="ctx-item"><b>Workflow activo</b> — mueve automáticamente según frecuencia superada</div>
+    <div class="ctx-item"><b>Semanal:</b> dias_sin_pedido > 7 + etapa ACTIVO → EN RIESGO</div>
+    <div class="ctx-item"><b>Quincenal:</b> dias_sin_pedido > 15 + etapa ACTIVO → EN RIESGO</div>
+    <div class="ctx-item"><b>Mensual:</b> dias_sin_pedido > 30 + etapa ACTIVO → EN RIESGO</div>
+    <div class="ctx-item"><b>>Mensual:</b> dias_sin_pedido > 45 + etapa ACTIVO → EN RIESGO</div>
+    <div class="ctx-item"><b>Panel "Gestión - Clientes EN RIESGO":</b> 181 activos / 130 en riesgo / 59 sin contacto / 28 con contacto (43 gap = sin fecha de último contacto cargada)</div>
+    <div class="ctx-item"><b>Comunicación al equipo:</b> verbal en oficina + screenshot WhatsApp cuando home office</div>
+  </div>
+</div>
+
+<!-- FASE 1 -->
+<div id="f1" class="view">
+  <div class="phase-hdr">
+    <span class="phase-badge b1">Fase 1 · Mes 1–2</span>
+    <div><div class="phase-title">Orden y base sólida</div><div class="phase-sub">Antes de analizar mejor, que lo que existe funcione bien</div></div>
+  </div>
+  <div class="stats-row" id="f1-stats"></div>
+  <div class="prog-wrap"><div class="prog-label" id="f1-lbl">Calculando...</div><div class="prog-track"><div class="prog-bar pb1" id="f1-bar" style="width:0%"></div></div></div>
+
+  <div class="sec-label sl-p">Pipeline — etapas y criterios</div>
+  <div class="checklist" id="g-pipe"></div>
+  <div class="add-row"><input class="add-input" id="in-pipe" placeholder="Agregar tarea..."><button class="add-btn" onclick="addItem('pipe','in-pipe','f1')">+ Agregar</button></div>
+
+  <div class="sec-label sl-t">Datos — higiene del CRM</div>
+  <div class="checklist" id="g-datos"></div>
+  <div class="add-row"><input class="add-input" id="in-datos" placeholder="Agregar tarea..."><button class="add-btn" onclick="addItem('datos','in-datos','f1')">+ Agregar</button></div>
+
+  <div class="sec-label sl-a">Vendedores — disciplina operativa</div>
+  <div class="checklist" id="g-vend"></div>
+  <div class="add-row"><input class="add-input" id="in-vend" placeholder="Agregar tarea..."><button class="add-btn" onclick="addItem('vend','in-vend','f1')">+ Agregar</button></div>
+
+  <div class="sec-label sl-r">Analista — tareas propias fase 1</div>
+  <div class="checklist" id="g-anal1"></div>
+  <div class="add-row"><input class="add-input" id="in-anal1" placeholder="Agregar tarea..."><button class="add-btn" onclick="addItem('anal1','in-anal1','f1')">+ Agregar</button></div>
+</div>
+
+<!-- FASE 2 -->
+<div id="f2" class="view">
+  <div class="phase-hdr">
+    <span class="phase-badge b2">Fase 2 · Mes 2–4</span>
+    <div><div class="phase-title">Inteligencia comercial activa</div><div class="phase-sub">Detectar oportunidades y riesgos antes de que sea tarde</div></div>
+  </div>
+  <div class="stats-row" id="f2-stats"></div>
+  <div class="prog-wrap"><div class="prog-label" id="f2-lbl">Calculando...</div><div class="prog-track"><div class="prog-bar pb2" id="f2-bar" style="width:0%"></div></div></div>
+
+  <div class="sec-label sl-p">Alertas tempranas</div>
+  <div class="checklist" id="g-alertas"></div>
+  <div class="add-row"><input class="add-input" id="in-alertas" placeholder="Agregar tarea..."><button class="add-btn" onclick="addItem('alertas','in-alertas','f2')">+ Agregar</button></div>
+
+  <div class="sec-label sl-t">Oportunidades — upsell y recompra</div>
+  <div class="checklist" id="g-ups"></div>
+  <div class="add-row"><input class="add-input" id="in-ups" placeholder="Agregar tarea..."><button class="add-btn" onclick="addItem('ups','in-ups','f2')">+ Agregar</button></div>
+
+  <div class="sec-label sl-a">Control de vendedores</div>
+  <div class="checklist" id="g-ctrl"></div>
+  <div class="add-row"><input class="add-input" id="in-ctrl" placeholder="Agregar tarea..."><button class="add-btn" onclick="addItem('ctrl','in-ctrl','f2')">+ Agregar</button></div>
+
+  <div class="sec-label sl-r">Analista — tareas propias fase 2</div>
+  <div class="checklist" id="g-anal2"></div>
+  <div class="add-row"><input class="add-input" id="in-anal2" placeholder="Agregar tarea..."><button class="add-btn" onclick="addItem('anal2','in-anal2','f2')">+ Agregar</button></div>
+</div>
+
+<!-- FASE 3 -->
+<div id="f3" class="view">
+  <div class="phase-hdr">
+    <span class="phase-badge b3">Fase 3 · Mes 4+</span>
+    <div><div class="phase-title">Análisis, tendencias y decisiones</div><div class="phase-sub">Usar los datos para predecir, no solo para reportar</div></div>
+  </div>
+  <div class="stats-row" id="f3-stats"></div>
+  <div class="prog-wrap"><div class="prog-label" id="f3-lbl">Calculando...</div><div class="prog-track"><div class="prog-bar pb3" id="f3-bar" style="width:0%"></div></div></div>
+
+  <div class="sec-label sl-p">Tendencias comerciales</div>
+  <div class="checklist" id="g-tend"></div>
+  <div class="add-row"><input class="add-input" id="in-tend" placeholder="Agregar tarea..."><button class="add-btn" onclick="addItem('tend','in-tend','f3')">+ Agregar</button></div>
+
+  <div class="sec-label sl-t">Dashboard Power BI integrado</div>
+  <div class="checklist" id="g-pbi"></div>
+  <div class="add-row"><input class="add-input" id="in-pbi" placeholder="Agregar tarea..."><button class="add-btn" onclick="addItem('pbi','in-pbi','f3')">+ Agregar</button></div>
+
+  <div class="sec-label sl-a">Decisiones y mejora continua</div>
+  <div class="checklist" id="g-dec"></div>
+  <div class="add-row"><input class="add-input" id="in-dec" placeholder="Agregar tarea..."><button class="add-btn" onclick="addItem('dec','in-dec','f3')">+ Agregar</button></div>
+
+  <div class="sec-label sl-r">Analista — tareas propias fase 3</div>
+  <div class="checklist" id="g-anal3"></div>
+  <div class="add-row"><input class="add-input" id="in-anal3" placeholder="Agregar tarea..."><button class="add-btn" onclick="addItem('anal3','in-anal3','f3')">+ Agregar</button></div>
+</div>
+
+<!-- NOTAS -->
+<div id="notas" class="view">
+  <div class="card">
+    <div class="card-title">Nota general del proyecto</div>
+    <textarea class="note-textarea" id="nota-gral" placeholder="Decisiones tomadas, preguntas abiertas, contexto importante..."></textarea>
+    <div style="display:flex;align-items:center">
+      <button class="save-btn" onclick="saveNota()">Guardar</button>
+      <span class="save-ok" id="nota-ok">Guardado</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Pendientes y preguntas abiertas</div>
+    <div class="checklist" id="g-pend"></div>
+    <div class="add-row"><input class="add-input" id="in-pend" placeholder="Agregar pendiente..."><button class="add-btn" onclick="addItem('pend','in-pend','notas')">+ Agregar</button></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Decisiones tomadas</div>
+    <div class="checklist" id="g-decs"></div>
+    <div class="add-row"><input class="add-input" id="in-decs" placeholder="Agregar decisión..."><button class="add-btn" onclick="addItem('decs','in-decs','notas')">+ Agregar</button></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+const BIN_ID = '69d6b57836566621a890da39';
+const API_KEY = '$2a$10$IvokyXfXG2bsRKG9/hXzou.DzfwbKLEovXF8UU716f6UDmdIQm1vG';
+const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+const DEFAULTS = {
+  pipe:[
+    {t:'Criterio escrito definido para mover cliente a EN RIESGO',s:'done'},
+    {t:'Workflow automático EN RIESGO activo con 4 grupos por frecuencia',s:'done'},
+    {t:'Panel "Gestión - Clientes EN RIESGO" creado y funcionando',s:'done'},
+    {t:'Propiedad dias_sin_pedido calculada automáticamente',s:'done'},
+    {t:'Propiedad frecuencia_de_pedidos completada en casi todos los activos',s:'done'},
+    {t:'Corregir gap de 43 clientes que no aparecen en sin/con contacto del panel',s:'todo'},
+    {t:'Completar frecuencia_de_pedidos en los 2 negocios de Juan pendientes',s:'wip'},
+  ],
+  datos:[
+    {t:'Definir campo de cruce BPS ↔ HubSpot (CUIT, código o razón social)',s:'todo'},
+    {t:'Normalizar nombres de empresas en HubSpot para que coincidan con BPS',s:'todo'},
+    {t:'Completar fecha_ultimo_contacto en negocios sin esa propiedad',s:'wip'},
+    {t:'Eliminar o fusionar duplicados confirmados',s:'todo'},
+    {t:'Mapear solapamientos entre HubSpot y BPS',s:'todo'},
+  ],
+  vend:[
+    {t:'Cadencia mínima de actividades por cliente activo definida',s:'todo'},
+    {t:'Cada vendedor usa el playbook de pedido para actualizar fecha último pedido',s:'wip'},
+    {t:'Revisar playbooks existentes y completar los que faltan',s:'todo'},
+    {t:'Informe de tareas vencidas por vendedor',s:'todo'},
+  ],
+  anal1:[
+    {t:'Segmentación ABC de clientes con datos BPS (frecuencia + volumen)',s:'todo'},
+    {t:'Primer mapa de rentabilidad por cliente (margen real desde BPS)',s:'todo'},
+    {t:'Diagnóstico completo del canal documentado y presentado',s:'wip'},
+    {t:'Propuesta de política comercial (descuentos, crédito)',s:'todo'},
+    {t:'Tablero básico de control en Power BI funcionando',s:'todo'},
+  ],
+  alertas:[
+    {t:'Panel EN RIESGO por vendedor activo y siendo usado en reuniones',s:'wip'},
+    {t:'Ajustar filtro "sin contacto" para capturar los 43 del gap',s:'todo'},
+    {t:'Vista por vendedor: cuántos EN RIESGO tiene cada uno y cuántos sin contacto',s:'done'},
+    {t:'Definir protocolo de follow-up cuando cliente entra a EN RIESGO',s:'todo'},
+  ],
+  ups:[
+    {t:'Lista dinámica: activos sin compra en 30 / 60 / 90 días',s:'todo'},
+    {t:'Informe: clientes que compraron menos que el período anterior (desde BPS)',s:'todo'},
+    {t:'Propiedad "potencial de upsell" por cliente',s:'todo'},
+    {t:'Identificar clientes con baja frecuencia pero alto ticket — oportunidad de activación',s:'todo'},
+  ],
+  ctrl:[
+    {t:'Reunión semanal de equipo con datos del panel EN RIESGO',s:'wip'},
+    {t:'Ranking de actividad por vendedor (gestión, no solo ventas)',s:'todo'},
+    {t:'Tasa de conversión y tiempo en cada stage por vendedor',s:'todo'},
+    {t:'Check-in periódico: cuántos clientes cada vendedor rescató del riesgo',s:'todo'},
+  ],
+  anal2:[
+    {t:'Vista cliente 360: última factura (BPS) + último contacto (HubSpot)',s:'todo'},
+    {t:'Semáforo de cliente: verde / amarillo / rojo según compra + contacto',s:'todo'},
+    {t:'Informe de retención: clientes perdidos vs nuevos por período',s:'todo'},
+    {t:'Primeros cruces BPS + HubSpot en Power BI',s:'todo'},
+  ],
+  tend:[
+    {t:'Estacionalidad por tipo de cliente gastronómico',s:'todo'},
+    {t:'Correlación entre frecuencia de contacto y volumen de compra',s:'todo'},
+    {t:'Modelo de alerta temprana: clientes con tendencia a reducir compra',s:'todo'},
+    {t:'Qué acciones de vendedor correlacionan con más ventas',s:'todo'},
+  ],
+  pbi:[
+    {t:'Vista unificada: lo facturado (BPS) + lo gestionado (HubSpot) por cliente',s:'todo'},
+    {t:'Ranking de clientes por valor anual y tendencia (sube/baja/estable)',s:'todo'},
+    {t:'Score RFM por cliente (Recencia + Frecuencia + Valor)',s:'todo'},
+    {t:'Mapa de calor: qué rubros/zonas compran más y en qué época',s:'todo'},
+  ],
+  dec:[
+    {t:'Reunión mensual de ventas con datos — no solo intuición',s:'todo'},
+    {t:'Revisión de playbooks según lo que realmente funciona',s:'todo'},
+    {t:'Perfil del cliente ideal en gastronomía → replicarlo en prospectos',s:'todo'},
+    {t:'Plan de crecimiento con margen objetivo documentado',s:'todo'},
+  ],
+  anal3:[
+    {t:'Informe de evolución de mix de productos por cliente',s:'todo'},
+    {t:'Simulador de escenarios: qué pasa si pierdo X clientes tipo A',s:'todo'},
+    {t:'Plan de crecimiento con margen objetivo documentado',s:'todo'},
+  ],
+  pend:[],
+  decs:[],
+  _nota: '',
+};
+
+const PHASE_MAP = {
+  f1:['pipe','datos','vend','anal1'],
+  f2:['alertas','ups','ctrl','anal2'],
+  f3:['tend','pbi','dec','anal3'],
+};
+
+let DATA = {};
+let saveTimer = null;
+
+function setSyncLabel(t, color) {
+  const el = document.getElementById('sync-lbl');
+  if (el) { el.textContent = t; el.style.color = color || ''; }
+}
+
+async function loadData() {
+  setSyncLabel('Cargando...');
+  try {
+    const res = await fetch(API_URL + '/latest', {
+      headers: { 'X-Master-Key': API_KEY }
+    });
+    const json = await res.json();
+    DATA = json.record;
+    for (const k of Object.keys(DEFAULTS)) {
+      if (!DATA[k]) DATA[k] = JSON.parse(JSON.stringify(DEFAULTS[k]));
+    }
+    if (!DATA._nota) DATA._nota = '';
+    renderAll();
+    setSyncLabel('Sincronizado', 'var(--green)');
+  } catch(e) {
+    DATA = JSON.parse(JSON.stringify(DEFAULTS));
+    renderAll();
+    setSyncLabel('Sin conexión — datos locales', 'var(--orange)');
+  }
+}
+
+async function saveData() {
+  setSyncLabel('Guardando...');
+  try {
+    await fetch(API_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+      body: JSON.stringify(DATA)
+    });
+    setSyncLabel('Guardado', 'var(--green)');
+    setTimeout(() => setSyncLabel('Sincronizado'), 2000);
+  } catch(e) {
+    setSyncLabel('Error al guardar', 'var(--red)');
+  }
+}
+
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveData, 800);
+}
+
+function cycleState(s) { return s === 'todo' ? 'wip' : s === 'wip' ? 'done' : 'todo'; }
+function stateLabel(s) { return s === 'done' ? 'Hecho' : s === 'wip' ? 'En progreso' : 'Pendiente'; }
+
+function renderGroup(gid) {
+  const el = document.getElementById('g-' + gid);
+  if (!el) return;
+  const items = DATA[gid] || [];
+  if (items.length === 0) {
+    el.innerHTML = '<div style="padding:14px 16px;font-size:13px;color:var(--text3);text-align:center">Sin tareas — agregá la primera</div>';
+    return;
+  }
+  el.innerHTML = '';
+  items.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'check-item';
+    const chk = document.createElement('div');
+    chk.className = 'chk' + (item.s === 'done' ? ' done' : item.s === 'wip' ? ' wip' : '');
+    const body = document.createElement('div');
+    body.className = 'check-body';
+    const txt = document.createElement('div');
+    txt.className = 'check-text' + (item.s === 'done' ? ' done' : '');
+    txt.textContent = item.t;
+    const meta = document.createElement('div');
+    meta.className = 'check-meta';
+    meta.textContent = 'Clic → ' + stateLabel(cycleState(item.s));
+    body.appendChild(txt);
+    body.appendChild(meta);
+    const del = document.createElement('button');
+    del.className = 'check-del';
+    del.textContent = '✕';
+    del.title = 'Eliminar';
+    del.onclick = (e) => {
+      e.stopPropagation();
+      if (confirm('¿Eliminar "' + item.t + '"?')) {
+        DATA[gid].splice(i, 1);
+        scheduleSave();
+        renderGroup(gid);
+        updateProgress();
+      }
+    };
+    row.appendChild(chk);
+    row.appendChild(body);
+    row.appendChild(del);
+    row.onclick = () => {
+      DATA[gid][i].s = cycleState(DATA[gid][i].s);
+      scheduleSave();
+      renderGroup(gid);
+      updateProgress();
+    };
+    el.appendChild(row);
+  });
+}
+
+function addItem(gid, inputId, phase) {
+  const inp = document.getElementById(inputId);
+  if (!inp || !inp.value.trim()) return;
+  if (!DATA[gid]) DATA[gid] = [];
+  DATA[gid].push({ t: inp.value.trim(), s: 'todo' });
+  inp.value = '';
+  scheduleSave();
+  renderGroup(gid);
+  updateProgress();
+}
+
+function updateProgress() {
+  Object.entries(PHASE_MAP).forEach(([phase, groups]) => {
+    let total = 0, done = 0, wip = 0;
+    groups.forEach(g => {
+      (DATA[g] || []).forEach(it => {
+        total++;
+        if (it.s === 'done') done++;
+        else if (it.s === 'wip') wip++;
+      });
+    });
+    const pct = total > 0 ? Math.round((done + wip * 0.5) / total * 100) : 0;
+    const bar = document.getElementById(phase + '-bar');
+    const lbl = document.getElementById(phase + '-lbl');
+    const stats = document.getElementById(phase + '-stats');
+    if (bar) bar.style.width = pct + '%';
+    if (lbl) lbl.textContent = done + ' hechas · ' + wip + ' en progreso · ' + (total - done - wip) + ' pendientes (' + pct + '%)';
+    if (stats) {
+      stats.innerHTML = `
+        <div class="stat"><div class="stat-val sv-green">${done}</div><div class="stat-lbl">Hechas</div></div>
+        <div class="stat"><div class="stat-val sv-orange">${wip}</div><div class="stat-lbl">En progreso</div></div>
+        <div class="stat"><div class="stat-val sv-gray">${total - done - wip}</div><div class="stat-lbl">Pendientes</div></div>
+      `;
+    }
+  });
+}
+
+function saveNota() {
+  const el = document.getElementById('nota-gral');
+  if (!el) return;
+  DATA._nota = el.value;
+  saveData();
+  const ok = document.getElementById('nota-ok');
+  if (ok) { ok.style.opacity = '1'; setTimeout(() => ok.style.opacity = '0', 2000); }
+}
+
+function renderAll() {
+  Object.keys(DEFAULTS).filter(k => k !== '_nota').forEach(g => renderGroup(g));
+  updateProgress();
+  const notaEl = document.getElementById('nota-gral');
+  if (notaEl && DATA._nota) notaEl.value = DATA._nota;
+}
+
+function showTab(id, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const v = document.getElementById(id);
+  if (v) v.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+function copyCtx() {
+  const el = document.getElementById('ctx-copy');
+  if (el) {
+    navigator.clipboard.writeText(el.textContent).then(() => {
+      const ok = document.getElementById('copy-ok');
+      if (ok) { ok.style.opacity = '1'; setTimeout(() => ok.style.opacity = '0', 2000); }
+    });
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveData(); }
+});
+
+loadData();
+</script>
+</body>
+</html>
